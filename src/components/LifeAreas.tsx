@@ -213,7 +213,7 @@ export const LifeAreas: React.FC = () => {
                         transform: isHovered ? 'scale(1.15)' : 'scale(1)',
                       }}
                     >
-                      {React.cloneElement(area.icon as React.ReactElement, { className: "w-8 h-8 md:w-10 md:h-10" })}
+                      {React.cloneElement(area.icon as React.ReactElement<{className?: string}>, { className: "w-8 h-8 md:w-10 md:h-10" })}
                     </div>
                   </div>
                 );
@@ -240,7 +240,7 @@ export const LifeAreas: React.FC = () => {
                           boxShadow: `0 0 30px ${area.color}30`
                         }}
                       >
-                        {React.cloneElement(area.icon as React.ReactElement, { className: "w-12 h-12" })}
+                        {React.cloneElement(area.icon as React.ReactElement<{className?: string}>, { className: "w-12 h-12" })}
                       </div>
                       <h3 
                         className="text-4xl font-black text-center mb-4"
