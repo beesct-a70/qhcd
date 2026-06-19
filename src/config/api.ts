@@ -1,0 +1,9 @@
+// CẤU HÌNH GOOGLE APPS SCRIPT URL
+const GOOGLE_APPS_SCRIPT_URL = process.env.NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL || "";
+const SECRET_KEY = process.env.NEXT_PUBLIC_SECRET_KEY || "";
+
+// CÁC ENDPOINT CHỨC NĂNG
+export const API_ENDPOINTS = {
+  REGISTER: `${GOOGLE_APPS_SCRIPT_URL}?key=${encodeURIComponent(SECRET_KEY)}`,
+  LOOKUP: `${GOOGLE_APPS_SCRIPT_URL}?key=${encodeURIComponent(SECRET_KEY)}`,
+} as const;
