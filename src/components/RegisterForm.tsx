@@ -230,27 +230,27 @@ export const RegisterForm: React.FC = () => {
     console.log('API Endpoint:', API_ENDPOINTS.REGISTER);
     
     try {
-      // Gửi dữ liệu lên Google Sheets
+      // Gửi dữ liệu lên Google Sheets bằng FormData để tránh CORS
+      const formDataToSend = new FormData();
+      formDataToSend.append('fullName', formData.fullName);
+      formDataToSend.append('birthDate', formData.birthDate);
+      formDataToSend.append('maSoAdaOrCccd', formData.maSoAdaOrCccd);
+      formDataToSend.append('phoneNumber', formData.phoneNumber);
+      formDataToSend.append('tuyenDauNhom', formData.tuyenDauNhom);
+      formDataToSend.append('tuyenTrenPlatinum', formData.tuyenTrenPlatinum);
+      formDataToSend.append('cccd', formData.cccd);
+      formDataToSend.append('uniformOption', formData.uniformOption);
+      formDataToSend.append('shirtSize', formData.shirtSize);
+      formDataToSend.append('gender', formData.gender);
+      formDataToSend.append('isVegetarian', formData.isVegetarian);
+      formDataToSend.append('transportOption', formData.transportOption);
+      formDataToSend.append('attendanceCount', formData.attendanceCount);
+      formDataToSend.append('soTien', pricing.totalAmount.toString());
+      formDataToSend.append('maMemo', maMemo);
+      
       const response = await fetch(API_ENDPOINTS.REGISTER, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fullName: formData.fullName,
-          birthDate: formData.birthDate,
-          maSoAdaOrCccd: formData.maSoAdaOrCccd,
-          phoneNumber: formData.phoneNumber,
-          tuyenDauNhom: formData.tuyenDauNhom,
-          tuyenTrenPlatinum: formData.tuyenTrenPlatinum,
-          cccd: formData.cccd,
-          uniformOption: formData.uniformOption,
-          shirtSize: formData.shirtSize,
-          gender: formData.gender,
-          isVegetarian: formData.isVegetarian,
-          transportOption: formData.transportOption,
-          attendanceCount: formData.attendanceCount,
-          soTien: pricing.totalAmount,
-          maMemo: maMemo
-        })
+        body: formDataToSend
       });
       
       console.log('Response status:', response.status, response.statusText);
