@@ -46,11 +46,14 @@ export const DISCOUNTS = {
 
 // Sample data for dropdowns
 export const TUYEN_DAU_NHOM_OPTIONS = [
+  'TDI Trần Phạm Bình & Nguyễn Thị Việt Nga',
   'DI Lê Thanh Bình & Nguyễn Minh Thảo',
   'FEMR Nguyễn Thanh Hiếu & Nguyễn Bảo Ngọc',
   'EMR Đào Thu Hiền',
   'EMR Nguyễn Văn Dương & Lê Thị Mai Anh',
   'FDD Nguyễn Thị Hằng & Nguyễn Thanh Tùng',
+  // THÊM LỰA CHỌN MỚI Ở ĐÂY, VÍ DỤ:
+  // 'TÊN TUYỀN MỚI',
 ];
 
 export const ATTENDANCE_OPTIONS = ['Lần 1', 'Lần 2', 'Lần 3 trở lên'];

@@ -19,7 +19,7 @@ import {
   Send
 } from 'lucide-react';
 import {
-  FormData,
+  FormData as RegisterFormData,
   calculatePricing,
   formatCurrency,
   generateVietQRUrl,
@@ -31,7 +31,7 @@ import {
 } from '@/utils/payment';
 import { API_ENDPOINTS } from '@/config/api';
 
-const initialFormData: FormData = {
+const initialFormData: RegisterFormData = {
   fullName: '',
   birthDate: '',
   gender: '',
@@ -58,7 +58,7 @@ interface SubmissionState {
 
 export const RegisterForm: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [formData, setFormData] = useState<RegisterFormData>(initialFormData);
   const pricing = useMemo(() => calculatePricing(formData), [formData]);
   const [isAttendanceDropdownOpen, setIsAttendanceDropdownOpen] = useState(false);
   const [isTuyenDauDropdownOpen, setIsTuyenDauDropdownOpen] = useState(false);
@@ -93,7 +93,7 @@ export const RegisterForm: React.FC = () => {
     };
   }, []);
 
-  const handleInputChange = (field: keyof FormData, value: string) => {
+  const handleInputChange = (field: keyof RegisterFormData, value: string) => {
     // Sanitize input to prevent XSS
     const sanitizedValue = value
       .replace(/[<>\"'&;]/g, '');
