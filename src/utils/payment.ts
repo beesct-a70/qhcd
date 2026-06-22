@@ -46,6 +46,7 @@ export const DISCOUNTS = {
 
 // Sample data for dropdowns
 export const TUYEN_DAU_NHOM_OPTIONS = [
+  'TDI Trần Phạm Bình & Nguyễn Thị Việt Nga',
   'DI Lê Thanh Bình & Nguyễn Minh Thảo',
   'FEMR Nguyễn Thanh Hiếu & Nguyễn Bảo Ngọc',
   'EMR Đào Thu Hiền',
