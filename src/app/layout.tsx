@@ -6,6 +6,9 @@ import Footer from "@/components/Footer";
 export const metadata: Metadata = {
   title: "Đăng ký & Quản lý Khóa học Quy Hoạch Cuộc Đời K23",
   description: "Hệ thống đăng ký và quản lý khóa học Quy Hoạch Cuộc Đời K23",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
