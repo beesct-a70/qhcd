@@ -213,7 +213,10 @@ export const RegisterForm: React.FC = () => {
     let recaptchaToken = '';
     if (RECAPTCHA_SITE_KEY) {
       recaptchaToken = recaptchaRef.current?.getValue() || '';
-      // Tạm bỏ kiểm tra: if (!recaptchaToken) { setCaptchaError... }
+    if (!recaptchaToken) {
+		setCaptchaError('Vui lòng xác nhận bạn không phải robot!');
+		return;
+		}
     }
     
     setSubmission({ status: 'submitting', message: 'Đang gửi thông tin đăng ký...' });
