@@ -211,8 +211,10 @@ export const RegisterForm: React.FC = () => {
     
     // Validate reCAPTCHA if site key exists (tạm bỏ)
     let recaptchaToken = '';
+    console.log('RECAPTCHA_SITE_KEY:', RECAPTCHA_SITE_KEY);
     if (RECAPTCHA_SITE_KEY) {
       recaptchaToken = recaptchaRef.current?.getValue() || '';
+      console.log('recaptchaToken:', recaptchaToken);
     if (!recaptchaToken) {
 		setCaptchaError('Vui lòng xác nhận bạn không phải robot!');
 		return;
@@ -238,7 +240,8 @@ export const RegisterForm: React.FC = () => {
       transportOption: formData.transportOption,
       attendanceCount: formData.attendanceCount,
       soTien: pricing.totalAmount,
-      maMemo: maMemo
+      maMemo: maMemo,
+      recaptchaToken: recaptchaToken
     });
     console.log('API Endpoint:', API_ENDPOINTS.REGISTER);
     
@@ -262,6 +265,7 @@ export const RegisterForm: React.FC = () => {
       if (RECAPTCHA_SITE_KEY && recaptchaToken) {
         formDataToSend.append('recaptcha', recaptchaToken);
       }
+      console.log('formDataToSend:', formDataToSend.toString());
       
       const response = await fetch(API_ENDPOINTS.REGISTER, {
         method: 'POST',
