@@ -26,10 +26,9 @@ import {
   generateZaloMessage,
   TUYEN_DAU_NHOM_OPTIONS,
   ATTENDANCE_OPTIONS,
-  BANK_INFO,
   removeVietnameseAccents
 } from '@/utils/payment';
-import { API_ENDPOINTS } from '@/config/api';
+import { API_ENDPOINTS, BANK_INFO } from '@/config/api';
 
 const initialFormData: RegisterFormData = {
   fullName: '',

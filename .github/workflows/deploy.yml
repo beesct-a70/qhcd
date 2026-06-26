@@ -77,6 +77,10 @@ jobs:
         env:
           NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL: ${{ secrets.NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL }}
           NEXT_PUBLIC_SECRET_KEY: ${{ secrets.NEXT_PUBLIC_SECRET_KEY }}
+          NEXT_PUBLIC_BANK_BIN: ${{ secrets.NEXT_PUBLIC_BANK_BIN }}
+          NEXT_PUBLIC_BANK_ACCOUNT_NUMBER: ${{ secrets.NEXT_PUBLIC_BANK_ACCOUNT_NUMBER }}
+          NEXT_PUBLIC_BANK_ACCOUNT_NAME: ${{ secrets.NEXT_PUBLIC_BANK_ACCOUNT_NAME }}
+          NEXT_PUBLIC_BANK_NAME: ${{ secrets.NEXT_PUBLIC_BANK_NAME }}
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

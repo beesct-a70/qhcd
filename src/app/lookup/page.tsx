@@ -157,7 +157,7 @@ export default function LookupPage() {
                     </p>
                   </div>
                   <div className="p-4 bg-slate-800/50 rounded-xl">
-                    <p className="text-sm text-slate-500 mb-1">Số tiền cần đóng</p>
+                    <p className="text-sm text-slate-500 mb-1">Số tiền đã nộp</p>
                     <p className="text-xl font-bold text-orange-400">
                       {formatCurrency(result.data.soTienCanDong)}
                     </p>

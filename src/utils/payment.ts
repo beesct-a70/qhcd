@@ -1,3 +1,5 @@
+import { BANK_INFO } from '@/config/api';
+
 // ============ INTERFACES ============
 export interface FormData {
   // Step 1: Personal Info
@@ -28,13 +30,6 @@ export interface PricingBreakdown {
 }
 
 // ============ CONSTANTS ============
-export const BANK_INFO = {
-  bankBin: '970426', // MSB
-  accountNumber: '7001031991',
-  accountName: 'NGUYEN THI THAO',
-  bankName: 'MSB (TMCP Hàng Hải)'
-};
-
 export const TUITION_TIERS = {
   normal: { deadline: new Date('2026-07-09T23:59:59+07:00'), price: 2100000 },
 };

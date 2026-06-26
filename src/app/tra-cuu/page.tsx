@@ -225,7 +225,7 @@ const LookupPage: React.FC = () => {
                     </p>
                   </div>
                   <div className="p-4 bg-white rounded-xl border border-slate-200">
-                    <p className="text-sm text-slate-500 mb-1">Số tiền cần nộp</p>
+                    <p className="text-sm text-slate-500 mb-1">Số tiền đã nộp</p>
                     <p className="text-xl font-bold text-orange-600">
                       {item.soTien ? (typeof item.soTien === 'number' ? formatCurrency(item.soTien) : item.soTien) : 'Chưa có'}
                     </p>
