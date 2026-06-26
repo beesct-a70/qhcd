@@ -712,6 +712,13 @@ export const RegisterForm: React.FC = () => {
                       <CheckCircle2 className="w-16 h-16 text-orange-500 mx-auto mb-4" />
                       <h4 className="text-xl font-bold text-slate-900 mb-2">Xác nhận thông tin</h4>
                       <p className="text-slate-600 mb-6">Vui lòng kiểm tra lại thông tin trước khi gửi đăng ký!</p>
+                      {/* Debug: Hiển thị RECAPTCHA_SITE_KEY */}
+                      <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
+                        <p className="text-sm text-yellow-700">
+                          RECAPTCHA_SITE_KEY: {RECAPTCHA_SITE_KEY || 'KHÔNG CÓ GIÁ TRỊ!'}
+                        </p>
+                      </div>
+                      
                       {RECAPTCHA_SITE_KEY && (
                         <div className="mb-6">
                           <div className="flex justify-center">
