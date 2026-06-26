@@ -209,14 +209,11 @@ export const RegisterForm: React.FC = () => {
   const handleSubmit = async () => {
     if (pricing.isRegistrationClosed) return;
     
-    // Validate reCAPTCHA if site key exists
+    // Validate reCAPTCHA if site key exists (tạm bỏ)
     let recaptchaToken = '';
     if (RECAPTCHA_SITE_KEY) {
       recaptchaToken = recaptchaRef.current?.getValue() || '';
-      if (!recaptchaToken) {
-        setCaptchaError('Vui lòng xác nhận bạn không phải robot!');
-        return;
-      }
+      // Tạm bỏ kiểm tra: if (!recaptchaToken) { setCaptchaError... }
     }
     
     setSubmission({ status: 'submitting', message: 'Đang gửi thông tin đăng ký...' });
@@ -243,33 +240,30 @@ export const RegisterForm: React.FC = () => {
     console.log('API Endpoint:', API_ENDPOINTS.REGISTER);
     
     try {
-      // Gửi dữ liệu dạng application/x-www-form-urlencoded (Google Apps Script hay hiểu này hơn)
-      const params = new URLSearchParams();
-      params.append('fullName', formData.fullName);
-      params.append('birthDate', formData.birthDate);
-      params.append('maSoAdaOrCccd', formData.maSoAdaOrCccd);
-      params.append('phoneNumber', formData.phoneNumber);
-      params.append('tuyenDauNhom', formData.tuyenDauNhom);
-      params.append('tuyenTrenPlatinum', formData.tuyenTrenPlatinum);
-      params.append('cccd', formData.cccd);
-      params.append('uniformOption', formData.uniformOption);
-      params.append('shirtSize', formData.shirtSize || '');
-      params.append('gender', formData.gender);
-      params.append('isVegetarian', formData.isVegetarian);
-      params.append('transportOption', formData.transportOption);
-      params.append('attendanceCount', formData.attendanceCount);
-      params.append('soTien', pricing.totalAmount.toString());
-      params.append('maMemo', maMemo);
+      // Quay về dùng FormData như trước (đã chạy được)
+      const formDataToSend = new FormData();
+      formDataToSend.append('fullName', formData.fullName);
+      formDataToSend.append('birthDate', formData.birthDate);
+      formDataToSend.append('maSoAdaOrCccd', formData.maSoAdaOrCccd);
+      formDataToSend.append('phoneNumber', formData.phoneNumber);
+      formDataToSend.append('tuyenDauNhom', formData.tuyenDauNhom);
+      formDataToSend.append('tuyenTrenPlatinum', formData.tuyenTrenPlatinum);
+      formDataToSend.append('cccd', formData.cccd);
+      formDataToSend.append('uniformOption', formData.uniformOption);
+      formDataToSend.append('shirtSize', formData.shirtSize || '');
+      formDataToSend.append('gender', formData.gender);
+      formDataToSend.append('isVegetarian', formData.isVegetarian);
+      formDataToSend.append('transportOption', formData.transportOption);
+      formDataToSend.append('attendanceCount', formData.attendanceCount);
+      formDataToSend.append('soTien', pricing.totalAmount.toString());
+      formDataToSend.append('maMemo', maMemo);
       if (RECAPTCHA_SITE_KEY && recaptchaToken) {
-        params.append('recaptcha', recaptchaToken);
+        formDataToSend.append('recaptcha', recaptchaToken);
       }
       
       const response = await fetch(API_ENDPOINTS.REGISTER, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: params,
+        body: formDataToSend
       });
       
       console.log('Response status:', response.status, response.statusText);

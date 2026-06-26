@@ -31,14 +31,11 @@ const LookupPage: React.FC = () => {
     setCaptchaError(null);
     setResult(null);
 
-    // Get reCAPTCHA token if site key exists
+    // Get reCAPTCHA token if site key exists (tạm bỏ kiểm tra)
     let recaptchaToken = '';
     if (RECAPTCHA_SITE_KEY) {
       recaptchaToken = recaptchaRef.current?.getValue() || '';
-      if (!recaptchaToken) {
-        setCaptchaError('Vui lòng xác nhận bạn không phải robot!');
-        return;
-      }
+      // Tạm bỏ kiểm tra: if (!recaptchaToken) { setCaptchaError... }
     }
 
     // Basic validation for phone
