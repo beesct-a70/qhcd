@@ -243,8 +243,7 @@ export const RegisterForm: React.FC = () => {
     console.log('API Endpoint:', API_ENDPOINTS.REGISTER);
     
     try {
-      // Quay về dùng FormData như trước (đã chạy được)
-      const formDataToSend = new FormData();
+      const formDataToSend = new URLSearchParams();
       formDataToSend.append('fullName', formData.fullName);
       formDataToSend.append('birthDate', formData.birthDate);
       formDataToSend.append('maSoAdaOrCccd', formData.maSoAdaOrCccd);
@@ -266,6 +265,9 @@ export const RegisterForm: React.FC = () => {
       
       const response = await fetch(API_ENDPOINTS.REGISTER, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
         body: formDataToSend
       });
       
