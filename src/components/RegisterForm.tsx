@@ -246,7 +246,7 @@ export const RegisterForm: React.FC = () => {
     console.log('API Endpoint:', API_ENDPOINTS.REGISTER);
     
     try {
-      const formDataToSend = new URLSearchParams();
+      const formDataToSend = new FormData();
       formDataToSend.append('fullName', formData.fullName);
       formDataToSend.append('birthDate', formData.birthDate);
       formDataToSend.append('maSoAdaOrCccd', formData.maSoAdaOrCccd);
@@ -265,13 +265,9 @@ export const RegisterForm: React.FC = () => {
       if (RECAPTCHA_SITE_KEY && recaptchaToken) {
         formDataToSend.append('recaptcha', recaptchaToken);
       }
-      console.log('formDataToSend:', formDataToSend.toString());
       
       const response = await fetch(API_ENDPOINTS.REGISTER, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
         body: formDataToSend
       });
       
