@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Search, User, CheckCircle2, AlertCircle, Loader2, Phone, MapPin, RefreshCw } from 'lucide-react';
-import { API_ENDPOINTS } from '@/config/api';
+import React, { useState, useRef } from 'react';
+import { Search, User, CheckCircle2, AlertCircle, Loader2, Phone, MapPin } from 'lucide-react';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { API_ENDPOINTS, RECAPTCHA_SITE_KEY } from '@/config/api';
 import { formatCurrency } from '@/utils/payment';
 
 interface LookupResult {
@@ -18,39 +19,22 @@ interface LookupResult {
   message: string;
 }
 
-const generateCaptcha = () => {
-  const a = Math.floor(Math.random() * 10) + 1;
-  const b = Math.floor(Math.random() * 10) + 1;
-  return { a, b, answer: a + b };
-};
-
 const LookupPage: React.FC = () => {
   const [phone, setPhone] = useState<string>('');
-  const [captcha, setCaptcha] = useState<{ a: number; b: number; answer: number }>({ a: 0, b: 0, answer: 0 });
-  const [captchaInput, setCaptchaInput] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [result, setResult] = useState<LookupResult | null>(null);
   const [captchaError, setCaptchaError] = useState<string | null>(null);
-
-  const refreshCaptcha = useCallback(() => {
-    setCaptcha(generateCaptcha());
-    setCaptchaInput('');
-    setCaptchaError(null);
-  }, []);
-
-  useEffect(() => {
-    refreshCaptcha();
-  }, [refreshCaptcha]);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setCaptchaError(null);
     setResult(null);
 
-    // Validate CAPTCHA
-    if (Number(captchaInput) !== captcha.answer) {
-      setCaptchaError('Mã CAPTCHA không đúng! Vui lòng thử lại.');
-      refreshCaptcha();
+    // Get reCAPTCHA token
+    const recaptchaToken = recaptchaRef.current?.getValue();
+    if (!recaptchaToken) {
+      setCaptchaError('Vui lòng xác nhận bạn không phải robot!');
       return;
     }
 
@@ -61,14 +45,15 @@ const LookupPage: React.FC = () => {
         status: 'error',
         message: 'Vui lòng nhập số điện thoại hợp lệ!'
       });
+      recaptchaRef.current?.reset();
       return;
     }
 
     setLoading(true);
 
     try {
-      // Call Google Apps Script API
-      const url = `${API_ENDPOINTS.LOOKUP}&phone=${encodeURIComponent(cleanPhone)}`;
+      // Call Google Apps Script API with reCAPTCHA token
+      const url = `${API_ENDPOINTS.LOOKUP}&phone=${encodeURIComponent(cleanPhone)}&recaptcha=${encodeURIComponent(recaptchaToken)}`;
       
       const response = await fetch(url, {
         method: 'GET'
@@ -76,7 +61,7 @@ const LookupPage: React.FC = () => {
       const data = await response.json();
       
       setResult(data);
-      refreshCaptcha();
+      recaptchaRef.current?.reset();
       
     } catch (error) {
       console.error('Lookup error:', error);
@@ -125,37 +110,19 @@ const LookupPage: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-semibold text-slate-700 flex items-center gap-2">
-                <RefreshCw className="w-5 h-5 text-orange-500" />
-                Mã CAPTCHA
+              <label className="block text-sm font-semibold text-slate-700">
+                Xác thực bạn không phải robot
               </label>
-              <div className="flex gap-4 items-end">
-                <div className="flex-1">
-                  <div className="bg-gradient-to-r from-orange-50 to-orange-100 border border-orange-200 rounded-xl px-6 py-4 text-center mb-3">
-                    <span className="text-2xl font-black text-slate-900">
-                      {captcha.a} + {captcha.b} = ?
-                    </span>
-                  </div>
-                  <input
-                    type="number"
-                    value={captchaInput}
-                    onChange={(e) => setCaptchaInput(e.target.value)}
-                    placeholder="Nhập kết quả"
-                    className="w-full px-5 py-4 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all"
-                    required
-                  />
-                  {captchaError && (
-                    <p className="text-sm text-red-500 mt-2">{captchaError}</p>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  onClick={refreshCaptcha}
-                  className="p-4 bg-slate-50 border border-slate-300 rounded-xl text-slate-600 hover:text-orange-500 hover:border-orange-300 transition-all"
-                >
-                  <RefreshCw className="w-6 h-6" />
-                </button>
+              <div className="flex justify-center">
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey={RECAPTCHA_SITE_KEY}
+                  onChange={() => setCaptchaError(null)}
+                />
               </div>
+              {captchaError && (
+                <p className="text-sm text-red-500 mt-2 text-center">{captchaError}</p>
+              )}
             </div>
 
             <button

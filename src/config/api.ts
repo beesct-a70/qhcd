@@ -1,6 +1,7 @@
 // CẤU HÌNH GOOGLE APPS SCRIPT URL
 const GOOGLE_APPS_SCRIPT_URL = process.env.NEXT_PUBLIC_GOOGLE_APPS_SCRIPT_URL || "";
 const SECRET_KEY = process.env.NEXT_PUBLIC_SECRET_KEY || "";
+export const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "";
 
 // CẤU HÌNH THÔNG TIN NGÂN HÀNG
 export const BANK_INFO = {
