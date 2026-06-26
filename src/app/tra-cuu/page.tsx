@@ -66,7 +66,15 @@ const LookupPage: React.FC = () => {
       const response = await fetch(url, {
         method: 'GET'
       });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Lookup response error:', errorText);
+        throw new Error(`Không thể kết nối đến máy chủ (${response.status}): ${errorText}`);
+      }
+      
       const data = await response.json();
+      console.log('Lookup response data:', data);
       
       setResult(data);
       if (RECAPTCHA_SITE_KEY) {
@@ -77,7 +85,7 @@ const LookupPage: React.FC = () => {
       console.error('Lookup error:', error);
       setResult({
         status: 'error',
-        message: 'Lỗi kết nối hệ thống! Vui lòng thử lại sau.'
+        message: error instanceof Error ? error.message : 'Lỗi kết nối hệ thống! Vui lòng thử lại sau.'
       });
       
     } finally {
