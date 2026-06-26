@@ -1,5 +1,6 @@
 // CẤU HÌNH GOOGLE APPS SCRIPT URL (Updated 2026-06-26)
 const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzN995EEIUQGmjLst4msIn0yTfDbCODXFeTSpxHxDww553Td5K2AIwGuWrqHC46WU6uuw/exec";
+const SECRET_KEY = "HnTm^72sS";
 // Tạm thời hardcode để kiểm tra
 export const RECAPTCHA_SITE_KEY = "6Lc0nTUtAAAAAHtyCbnGuy7sjGfb6ngojK6G2Tu7";
 
