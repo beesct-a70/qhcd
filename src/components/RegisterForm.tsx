@@ -209,11 +209,14 @@ export const RegisterForm: React.FC = () => {
   const handleSubmit = async () => {
     if (pricing.isRegistrationClosed) return;
     
-    // Validate reCAPTCHA
-    const recaptchaToken = recaptchaRef.current?.getValue();
-    if (!recaptchaToken) {
-      setCaptchaError('Vui lòng xác nhận bạn không phải robot!');
-      return;
+    // Validate reCAPTCHA if site key exists
+    let recaptchaToken = '';
+    if (RECAPTCHA_SITE_KEY) {
+      recaptchaToken = recaptchaRef.current?.getValue() || '';
+      if (!recaptchaToken) {
+        setCaptchaError('Vui lòng xác nhận bạn không phải robot!');
+        return;
+      }
     }
     
     setSubmission({ status: 'submitting', message: 'Đang gửi thông tin đăng ký...' });
@@ -257,7 +260,9 @@ export const RegisterForm: React.FC = () => {
       formDataToSend.append('attendanceCount', formData.attendanceCount);
       formDataToSend.append('soTien', pricing.totalAmount.toString());
       formDataToSend.append('maMemo', maMemo);
-      formDataToSend.append('recaptcha', recaptchaToken);
+      if (RECAPTCHA_SITE_KEY && recaptchaToken) {
+        formDataToSend.append('recaptcha', recaptchaToken);
+      }
       
       const response = await fetch(API_ENDPOINTS.REGISTER, {
         method: 'POST',
@@ -701,18 +706,20 @@ export const RegisterForm: React.FC = () => {
                       <CheckCircle2 className="w-16 h-16 text-orange-500 mx-auto mb-4" />
                       <h4 className="text-xl font-bold text-slate-900 mb-2">Xác nhận thông tin</h4>
                       <p className="text-slate-600 mb-6">Vui lòng kiểm tra lại thông tin trước khi gửi đăng ký!</p>
-                      <div className="mb-6">
-                        <div className="flex justify-center">
-                          <ReCAPTCHA
-                            ref={recaptchaRef}
-                            sitekey={RECAPTCHA_SITE_KEY}
-                            onChange={() => setCaptchaError(null)}
-                          />
+                      {RECAPTCHA_SITE_KEY && (
+                        <div className="mb-6">
+                          <div className="flex justify-center">
+                            <ReCAPTCHA
+                              ref={recaptchaRef}
+                              sitekey={RECAPTCHA_SITE_KEY}
+                              onChange={() => setCaptchaError(null)}
+                            />
+                          </div>
+                          {captchaError && (
+                            <p className="text-sm text-red-500 mt-2">{captchaError}</p>
+                          )}
                         </div>
-                        {captchaError && (
-                          <p className="text-sm text-red-500 mt-2">{captchaError}</p>
-                        )}
-                      </div>
+                      )}
                       <button
                         onClick={handleSubmit}
                         className="w-full px-10 py-5 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold text-xl rounded-2xl shadow-xl shadow-orange-500/30 hover:shadow-orange-500/50 transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3"

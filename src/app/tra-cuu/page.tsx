@@ -31,11 +31,14 @@ const LookupPage: React.FC = () => {
     setCaptchaError(null);
     setResult(null);
 
-    // Get reCAPTCHA token
-    const recaptchaToken = recaptchaRef.current?.getValue();
-    if (!recaptchaToken) {
-      setCaptchaError('Vui lòng xác nhận bạn không phải robot!');
-      return;
+    // Get reCAPTCHA token if site key exists
+    let recaptchaToken = '';
+    if (RECAPTCHA_SITE_KEY) {
+      recaptchaToken = recaptchaRef.current?.getValue() || '';
+      if (!recaptchaToken) {
+        setCaptchaError('Vui lòng xác nhận bạn không phải robot!');
+        return;
+      }
     }
 
     // Basic validation for phone
@@ -45,15 +48,20 @@ const LookupPage: React.FC = () => {
         status: 'error',
         message: 'Vui lòng nhập số điện thoại hợp lệ!'
       });
-      recaptchaRef.current?.reset();
+      if (RECAPTCHA_SITE_KEY) {
+        recaptchaRef.current?.reset();
+      }
       return;
     }
 
     setLoading(true);
 
     try {
-      // Call Google Apps Script API with reCAPTCHA token
-      const url = `${API_ENDPOINTS.LOOKUP}&phone=${encodeURIComponent(cleanPhone)}&recaptcha=${encodeURIComponent(recaptchaToken)}`;
+      // Call Google Apps Script API
+      let url = `${API_ENDPOINTS.LOOKUP}&phone=${encodeURIComponent(cleanPhone)}`;
+      if (RECAPTCHA_SITE_KEY && recaptchaToken) {
+        url += `&recaptcha=${encodeURIComponent(recaptchaToken)}`;
+      }
       
       const response = await fetch(url, {
         method: 'GET'
@@ -61,7 +69,9 @@ const LookupPage: React.FC = () => {
       const data = await response.json();
       
       setResult(data);
-      recaptchaRef.current?.reset();
+      if (RECAPTCHA_SITE_KEY) {
+        recaptchaRef.current?.reset();
+      }
       
     } catch (error) {
       console.error('Lookup error:', error);
@@ -109,21 +119,23 @@ const LookupPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-slate-700">
-                Xác thực bạn không phải robot
-              </label>
-              <div className="flex justify-center">
-                <ReCAPTCHA
-                  ref={recaptchaRef}
-                  sitekey={RECAPTCHA_SITE_KEY}
-                  onChange={() => setCaptchaError(null)}
-                />
+            {RECAPTCHA_SITE_KEY && (
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-slate-700">
+                  Xác thực bạn không phải robot
+                </label>
+                <div className="flex justify-center">
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey={RECAPTCHA_SITE_KEY}
+                    onChange={() => setCaptchaError(null)}
+                  />
+                </div>
+                {captchaError && (
+                  <p className="text-sm text-red-500 mt-2 text-center">{captchaError}</p>
+                )}
               </div>
-              {captchaError && (
-                <p className="text-sm text-red-500 mt-2 text-center">{captchaError}</p>
-              )}
-            </div>
+            )}
 
             <button
               type="submit"
