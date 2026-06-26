@@ -206,6 +206,13 @@ export const RegisterForm: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    // Reset reCAPTCHA khi đến bước 3
+    if (currentStep === 3 && recaptchaRef.current) {
+      recaptchaRef.current.reset();
+    }
+  }, [currentStep]);
+
   const handleSubmit = async () => {
     if (pricing.isRegistrationClosed) return;
     
